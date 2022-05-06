@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Button, Form } from 'react-bootstrap'
+import enterLobby from '../../Auth/enterLobby'
 
 const PanelFrame = styled.div`
 display: inline-flex;
@@ -26,7 +27,7 @@ function LoginPanel() {
           <Form.Control value={secretID} onChange={e => setSecretID(e.target.value)} placeholder="Secret ID"/>
         </Form.Group>
         <Button onClick={ e => {
-          console.log(secretID)
+          enterLobby(secretID).then()
         } }>Join</Button>
       </Form>
     </PanelFrame>
