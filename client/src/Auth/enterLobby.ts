@@ -15,7 +15,7 @@ export default async function enterLobby(lobby_id: string) {
 	})
 	.then(resp => resp.json())
 	.then(data => {
-		return data.success === true;
+		return data;
 	})
 	.catch(e => {
 		console.log("Failed to enter lobby ")
