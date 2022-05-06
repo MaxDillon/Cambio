@@ -1,0 +1,14 @@
+
+syntax = "proto3";
+
+package authPackage;
+
+
+service Login {
+
+	rpc RequestLogin(NoMessage) returns (NoMessage);
+
+}
+
+message NoMessage {}
+
