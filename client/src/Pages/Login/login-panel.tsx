@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Form } from 'react-bootstrap'
 import enterLobby from '../../Auth/enterLobby'
@@ -16,24 +16,31 @@ border-radius: 50px;
 background: papayawhip;
 `
 
-function LoginPanel() {
+
+const LoginPanel: FC = () => {
   const [secretID, setSecretID] = useState("")
   const navigate = useNavigate();
+  
+  const handleSubmit = useCallback( (e: React.FormEvent) => {
+    e.preventDefault();
+
+    enterLobby(secretID)
+    .then(data => {
+      if(data.err) {
+        
+      } else {
+        navigate('/game');
+      }
+    })
+
+  }, [navigate, secretID]);
+
+
 
   return (
     <PanelFrame>
       <h1>Login</h1>
-      <Form onSubmit={e => {
-        e.preventDefault()
-        enterLobby(secretID)
-        .then(data => {
-          if(data.err) {
-            
-          } else {
-            navigate('/game');
-          }
-        })
-      }}>
+      <Form onSubmit={e => handleSubmit(e)}>
         <Form.Group>
           <Form.Control autoFocus value={secretID} onChange={e => setSecretID(e.target.value)} placeholder="Secret ID"/>
         </Form.Group>

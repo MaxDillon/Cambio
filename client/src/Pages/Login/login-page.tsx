@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 import LoginPanel from './login-panel'
  
 
-function LoginPage() {
+const LoginPage: FC = () => {
   return (
 	 <div style={{'textAlign': 'center'}}>
 		<LoginPanel />
