@@ -1,17 +1,17 @@
 
-import React, { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
-function GamePage() {
-
+const GamePage: FC = () => {
+  
   useEffect(() => {
     fetch("/game/data")
     .then(res => res.json())
     .then(data => console.log(data))
-  }, [])
-
+  }, []);
+  
   return (
-	 <div>GamePage</div>
-  )
+    <div>GamePage</div>
+  );
 }
-
+  
 export default GamePage

@@ -23,7 +23,7 @@ const LoginPanel: FC = () => {
   
   const handleSubmit = useCallback( (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     enterLobby(secretID)
     .then(data => {
       if(data.err) {
@@ -32,11 +32,11 @@ const LoginPanel: FC = () => {
         navigate('/game');
       }
     })
-
+    
   }, [navigate, secretID]);
-
-
-
+  
+  
+  
   return (
     <PanelFrame>
       <h1>Login</h1>
