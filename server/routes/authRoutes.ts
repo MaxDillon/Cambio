@@ -1,29 +1,21 @@
 import express from 'express'
-import { Request, Response } from 'express'
 import Lobby from '../game/lobby'
 import jwt from 'jsonwebtoken'
+import { initToken } from '../auth/verify'
 
 const router = express.Router()
-const SECRET = 'asdfaksdfkladfasdfkasdkfjlsd'
-router.post('/enterLobby', (req: Request, res: Response) => {
+
+router.post('/enterLobby', (req, res, next) => {
 	const id_hash = req.body.id_hash;
 	const nick = req.body.nick;
 
-	var lobby: Lobby;
-	if (id_hash in Lobby.lobbies) {
-		lobby = Lobby.lobbies[id_hash];
-	} else {
-		lobby = new Lobby(id_hash);		 
-	}
-	const player_number = lobby.addUser(nick)
-	const webToken = jwt.sign({id_hash: id_hash, player_number: player_number}, SECRET)
+	var lobby: Lobby = (id_hash in Lobby.lobbies) ? Lobby.lobbies[id_hash] : new Lobby(id_hash);
 
-	res.cookie('roomJsonToken', webToken, {httpOnly: true, maxAge: 360000, secure: true, sameSite: true})
-	res.send({
-		err: false,
-		message: 'added to lobby'
-	})
-})
+	res.locals.player_number = lobby.addUser(nick);
+	res.locals.id_hash = id_hash;
+	next()
+	
+}, initToken)
 
 
 
