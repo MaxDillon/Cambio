@@ -26,7 +26,8 @@ const LoginPanel: FC = () => {
     
     enterLobby(secretID)
     .then(data => {
-      if(data.err) {
+      console.log(data)
+      if(data) {
         
       } else {
         navigate('/game');

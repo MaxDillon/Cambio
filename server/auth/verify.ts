@@ -22,23 +22,38 @@ export function initToken(req: Request, res: Response) {
 	})
 }
 
-export function verifyToken(req: Request, res: Response, next: NextFunction) {
+export function getToken(req: Request) {
 	const token = req.cookies.roomJsonToken
+	if (token === null) return null;
 
 	try {
-		const data = jwt.verify(token, process.env.SERVER_SECRET) as Token
-
-		res.locals.id_hash = data.id_hash;
-		res.locals.player_number = data.player_number;
-		next()	
-
+		return jwt.verify(token, process.env.SERVER_SECRET) as Token
 	} catch {
+		return null
+	}
+}
+
+export function hasToken(req: Request, res: Response, next: NextFunction) {
+	if (getToken(req)) {
+		res.locals.hasToken = true;
+	} else {
+		res.locals.hasToken = false;
+	}
+	next();
+}
+
+
+export function verifyToken(req: Request, res: Response, next: NextFunction) {
+	const token = getToken(req);
+	if (token) {
+		res.locals.player_number = token.player_number;
+		res.locals.id_hash = token.id_hash;
+		next()
+	} else {
 		res.send({
 			err: true,
 			mesage: "cannot authenticate jsonWebToken"
 		})
-		return
 	}
-
-
 }
+

@@ -1,17 +1,27 @@
 import express from 'express'
-import Lobby from '../game/lobby'
+import Game from '../game/game'
 import jwt from 'jsonwebtoken'
-import { initToken } from '../auth/verify'
+import { hasToken, initToken } from '../auth/verify'
 
 const router = express.Router()
 
-router.post('/enterLobby', (req, res, next) => {
+router.post('/enterLobby', hasToken, (req, res, next) => {
+
+	// if (res.locals.hasToken) {
+	// 	res.send({
+	// 		err: true,
+	// 		message: "Player already part of game"
+	// 	})
+	// 	return
+	// }
+
 	const id_hash = req.body.id_hash;
 	const nick = req.body.nick;
 
-	var lobby: Lobby = (id_hash in Lobby.lobbies) ? Lobby.lobbies[id_hash] : new Lobby(id_hash);
+	var game: Game = (id_hash in Game.lobbies) ? Game.lobbies[id_hash] : new Game(id_hash);
 
-	res.locals.player_number = lobby.addUser(nick);
+	res.locals.player_number = game.addUser(nick);
+	game.deal(res.locals.player_number)
 	res.locals.id_hash = id_hash;
 	next()
 	
